@@ -18,6 +18,25 @@ This plugin enables LiveKit applications to use Dify.ai's API for natural langua
 
 ## Installation
 
+### Option 1: Install from GitHub Repository
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Elghandour-eng/dify_livekit_plugin.git
+```
+
+2. Copy the `dify` folder to your project's plugins directory:
+```bash
+cp -r dify_livekit_plugin/livekit/plugins/dify backend/src/livekit/plugins/
+```
+
+3. Install the required dependencies:
+```bash
+pip install aiohttp
+```
+
+### Option 2: Manual Installation
+
 1. Ensure you have the required dependencies:
 ```bash
 pip install aiohttp
@@ -87,7 +106,6 @@ agent = VoicePipelineAgent(
 ```
 
 ## Advanced Configuration
-
 
 ### Conversation Management
 
