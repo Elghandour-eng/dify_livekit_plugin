@@ -43,6 +43,7 @@ class LLM(llm.LLM):
         conversation_id (str | None): The conversation ID to continue. Defaults to None.
         """
         super().__init__()
+        self._session: Optional[aiohttp.ClientSession] = None
         self._capabilities = LLMCapabilities(
             supports_choices_on_int=False,
         )
@@ -96,8 +97,12 @@ class LLM(llm.LLM):
             "Content-Type": "application/json"
         }
 
+        # Create or reuse the session
+        if self._session is None:
+            self._session = aiohttp.ClientSession()
+            
         # Create the stream
-        stream = aiohttp.ClientSession().post(
+        stream = self._session.post(
             f"{self._opts.api_base}/v1/chat-messages",
             headers=headers,
             json=payload
@@ -110,6 +115,12 @@ class LLM(llm.LLM):
             conn_options=conn_options,
             fnc_ctx=fnc_ctx,
         )
+
+    async def close(self) -> None:
+        """Close the LLM client and cleanup resources"""
+        if self._session is not None:
+            await self._session.close()
+            self._session = None
 
     @classmethod
     def from_env(cls) -> "LLM":
